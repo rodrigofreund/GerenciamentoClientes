@@ -1,0 +1,5 @@
+
+
+CREATE TABLE Cliente(
+	CPF BIGINT PRIMARY KEY
+	);
