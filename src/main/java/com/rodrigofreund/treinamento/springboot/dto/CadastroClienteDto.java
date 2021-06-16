@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public final class CriarClienteDto implements Serializable {
+public final class CadastroClienteDto implements Serializable {
 
     private static final long serialVersionUID = -5087777149384707796L;
 
