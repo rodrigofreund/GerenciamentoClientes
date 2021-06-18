@@ -10,16 +10,10 @@ import com.rodrigofreund.treinamento.springboot.repository.model.Cliente;
 public class ClienteMapper {
 
     public Cliente convertToCliente(CadastroClienteDto dto) {
-        return new Cliente(dto.getCpf(), dto.getNomeComleto(), dto.getDataNascimento(), dto.getEstadoCivil());
+        return new Cliente(dto.getCpf(), dto.getNome(), dto.getDataNascimento(), dto.getEstadoCivil());
     }
     
-    public ClienteDto convertToClienteDto(Cliente cliente, Integer idade) {
-        return ClienteDto.builder()
-                .cpf(cliente.getCpf())
-                .dataNascimento(cliente.getDataNascimento())
-                .estadoCivil(cliente.getEstadoCivil())
-                .nome(cliente.getNome())
-                .idade(idade)
-                .build();
+    public ClienteDto convertToClienteDto(Cliente cliente) {
+        return new ClienteDto(cliente.getCpf(), cliente.getNome(), cliente.getDataNascimento(), cliente.getEstadoCivil());
     }
 }

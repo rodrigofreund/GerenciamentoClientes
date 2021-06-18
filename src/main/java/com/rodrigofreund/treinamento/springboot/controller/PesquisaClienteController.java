@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rodrigofreund.treinamento.springboot.dto.FiltroCliente;
 import com.rodrigofreund.treinamento.springboot.dto.out.ClienteDto;
 import com.rodrigofreund.treinamento.springboot.mapper.ClienteMapper;
-import com.rodrigofreund.treinamento.springboot.repository.model.FiltroCliente;
 import com.rodrigofreund.treinamento.springboot.service.ClienteService;
 
 @RestController

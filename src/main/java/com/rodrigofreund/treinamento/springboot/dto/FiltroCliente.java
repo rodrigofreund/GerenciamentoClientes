@@ -1,4 +1,4 @@
-package com.rodrigofreund.treinamento.springboot.repository.model;
+package com.rodrigofreund.treinamento.springboot.dto;
 
 import java.time.LocalDate;
 

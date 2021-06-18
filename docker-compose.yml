@@ -1,0 +1,31 @@
+version: "3"
+services:
+  cadastrocliente-db:
+    build:
+      dockerfile: ./db.dockerfile
+      context: .
+    image: regcontapi.azurecr.io/rodrigofreund/cadastrocliente-db
+    container_name: cadastrocliente-db
+    ports:
+      - "3306:3306"
+    networks:
+      - "cadastro-cliente-network"
+  cadastrocliente-api:
+    build:
+      dockerfile: ./api.dockerfile
+      context: .
+    environment:
+      - "CADASTROCLIENTE_PROFILE=prd"
+      - "WAIT_HOSTS=cadastrocliente-db:3306"
+      - "WAIT_TIMEOUT=60"
+    image: regcontapi.azurecr.io/rodrigofreund/cadastrocliente-api
+    container_name: cadastrocliente-api
+    ports:
+      - "9000:9000"
+    networks:
+      - "cadastro-cliente-network"
+    depends_on:
+      - "cadastrocliente-db"
+networks:
+  cadastro-cliente-network:
+    driver: bridge

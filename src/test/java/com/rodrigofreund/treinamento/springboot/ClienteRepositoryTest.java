@@ -21,10 +21,10 @@ public class ClienteRepositoryTest {
     @Test
     public void findById() {
 
-        Cliente expected = new Cliente(6165156l, "Ana", LocalDate.now(), EstadoCivil.CASADO);
+        Cliente expected = new Cliente("6165156", "Ana", LocalDate.now(), EstadoCivil.CASADO);
         repository.save(expected);
 
-        Cliente actual = repository.findById(6165156l).orElseThrow(() -> new RuntimeException("Not found"));
+        Cliente actual = repository.findById("6165156").orElseThrow(() -> new RuntimeException("Not found"));
 
         assertEquals(expected.getCpf(), actual.getCpf());
 

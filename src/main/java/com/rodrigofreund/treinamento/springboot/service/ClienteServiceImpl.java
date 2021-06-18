@@ -1,7 +1,5 @@
 package com.rodrigofreund.treinamento.springboot.service;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,30 +8,29 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.rodrigofreund.treinamento.springboot.dto.CadastroClienteDto;
+import com.rodrigofreund.treinamento.springboot.dto.FiltroCliente;
 import com.rodrigofreund.treinamento.springboot.dto.out.ClienteDto;
 import com.rodrigofreund.treinamento.springboot.exception.ClienteExistenteException;
 import com.rodrigofreund.treinamento.springboot.exception.ClienteInexistenteException;
 import com.rodrigofreund.treinamento.springboot.mapper.ClienteMapper;
 import com.rodrigofreund.treinamento.springboot.repository.ClienteRepository;
 import com.rodrigofreund.treinamento.springboot.repository.model.Cliente;
-import com.rodrigofreund.treinamento.springboot.repository.model.FiltroCliente;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteServiceImpl implements ClienteService {
 
-    private ClienteRepository clienteRepository;
-    private ClienteMapper clienteMapper;
-
-    public ClienteServiceImpl(ClienteRepository clienteRepository, ClienteMapper clienteMapper) {
-        this.clienteRepository = clienteRepository;
-        this.clienteMapper = clienteMapper;
-    }
+    private final ClienteRepository clienteRepository;
+    private final ClienteMapper clienteMapper;
 
     @Override
     public Page<ClienteDto> findByCriteria(FiltroCliente filtroCliente, Pageable pageable) {
@@ -44,7 +41,7 @@ public class ClienteServiceImpl implements ClienteService {
             @Override
             public Predicate toPredicate(Root<Cliente> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
-                if(filtroCliente.pesquisaPorCpf()) {
+                if (filtroCliente.pesquisaPorCpf()) {
                     predicates.add(criteriaBuilder.equal(root.get("cpf"), filtroCliente.getCpf()));
                 }
                 if (filtroCliente.pesquisaPorNome()) {
@@ -61,45 +58,34 @@ public class ClienteServiceImpl implements ClienteService {
             }
         }, pageable);
 
-        return page.map(c -> clienteMapper.convertToClienteDto(c, calcularIdade(c.getDataNascimento())));
+        return page.map(c -> clienteMapper.convertToClienteDto(c));
 
-    }
-
-    public Page<ClienteDto> buscarTodos(Pageable pageable) {
-        Page<Cliente> result = clienteRepository.findAll(pageable);
-
-        Page<ClienteDto> converted = result
-                .map(c -> clienteMapper.convertToClienteDto(c, calcularIdade(c.getDataNascimento())));
-
-        return converted;
-    }
-
-    private Integer calcularIdade(LocalDate nascimento) {
-        return Period.between(nascimento, LocalDate.now()).getYears();
     }
 
     @Override
-    public boolean criarCliente(CadastroClienteDto dadosClienteDto) throws ClienteExistenteException {
-        
-        if(clienteRepository.existsById(dadosClienteDto.getCpf())) {
+    public ClienteDto criarCliente(CadastroClienteDto dadosClienteDto) throws ClienteExistenteException {
+
+        if (clienteRepository.existsById(dadosClienteDto.getCpf())) {
             throw new ClienteExistenteException();
         }
-            
-        clienteRepository.save(clienteMapper.convertToCliente(dadosClienteDto));
-        
-        return false;
+
+        Cliente cliente = clienteRepository.save(clienteMapper.convertToCliente(dadosClienteDto));
+
+        return clienteMapper.convertToClienteDto(cliente);
     }
 
     @Override
-    public boolean atualizarCliente(CadastroClienteDto dadosClienteDto) throws ClienteInexistenteException {
+    public ClienteDto atualizarCliente(CadastroClienteDto dadosClienteDto) throws ClienteInexistenteException {
+
+        Cliente clienteAnterior = clienteRepository.findById(dadosClienteDto.getCpf())
+                .orElseThrow(ClienteInexistenteException::new);
+
+        BeanUtils.copyProperties(dadosClienteDto, clienteAnterior);
         
-        if(!clienteRepository.existsById(dadosClienteDto.getCpf())) {
-            throw new ClienteInexistenteException();
-        }
-            
-        clienteRepository.save(clienteMapper.convertToCliente(dadosClienteDto));
-        
-        return false;
+        Cliente cliente = clienteRepository.save(clienteAnterior);
+
+        return clienteMapper.convertToClienteDto(cliente);
+
     }
 
 }

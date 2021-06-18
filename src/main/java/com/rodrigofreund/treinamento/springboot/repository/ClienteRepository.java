@@ -8,6 +8,6 @@ import com.rodrigofreund.treinamento.springboot.repository.model.Cliente;
 
 @Repository
 public interface ClienteRepository
-        extends PagingAndSortingRepository<Cliente, Long>, JpaSpecificationExecutor<Cliente> {
+        extends PagingAndSortingRepository<Cliente, String>, JpaSpecificationExecutor<Cliente> {
 
 }
