@@ -13,13 +13,13 @@ import lombok.Setter;
 @Setter
 public final class FiltroCliente {
 
-    private Long cpf;
+    private String cpf;
     private String nome;
     private LocalDate dataNascimento;
     private EstadoCivil estadoCivil;
     
     public boolean pesquisaPorCpf() {
-        return null != cpf;
+        return StringUtils.isNotBlank(cpf);
     }
     
     public boolean pesquisaPorNome() {

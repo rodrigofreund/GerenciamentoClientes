@@ -15,21 +15,18 @@ import com.rodrigofreund.treinamento.springboot.exception.ClienteExistenteExcept
 import com.rodrigofreund.treinamento.springboot.exception.ClienteInexistenteException;
 import com.rodrigofreund.treinamento.springboot.service.ClienteService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("Cadastro")
 public final class CadastroClienteController {
 
     private ClienteService clienteService;
 
-    public CadastroClienteController(ClienteService clienteService) {
-        this.clienteService = clienteService;
-    }
-
     @PostMapping(value = "/criar", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ClienteDto> cadastrarCliente(@Valid @RequestBody CadastroClienteDto dadosClienteDto)
             throws ClienteExistenteException {
-
-        System.out.println(dadosClienteDto);
 
         return ResponseEntity.ok(clienteService.criarCliente(dadosClienteDto));
     }
@@ -37,7 +34,6 @@ public final class CadastroClienteController {
     @PostMapping(value = "/atualizar", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ClienteDto> atualizarCliente(@Valid @RequestBody CadastroClienteDto dadosClienteDto)
             throws ClienteInexistenteException {
-        System.out.println(dadosClienteDto);
 
         return ResponseEntity.ok(clienteService.atualizarCliente(dadosClienteDto));
     }
