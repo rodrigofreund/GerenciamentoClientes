@@ -1,4 +1,4 @@
-package com.rodrigofreund.treinamento.springboot.exception;
+package com.rodrigofreund.treinamento.springboot.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+
+import com.rodrigofreund.treinamento.springboot.exception.BusinessException;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {

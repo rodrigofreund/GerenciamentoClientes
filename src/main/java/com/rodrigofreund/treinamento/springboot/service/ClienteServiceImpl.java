@@ -69,6 +69,7 @@ public class ClienteServiceImpl implements ClienteService {
             throw new ClienteExistenteException();
         }
 
+        //Tratar caso  ocorre erro ao salvar
         Cliente cliente = clienteRepository.save(clienteMapper.convertToCliente(dadosClienteDto));
 
         return clienteMapper.convertToClienteDto(cliente);
